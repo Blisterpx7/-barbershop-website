@@ -1,0 +1,55 @@
+{
+  "name": "barberys-backend",
+  "version": "2.0.0",
+  "description": "Professional barbershop management system backend",
+  "main": "index-new.js",
+  "scripts": {
+    "start": "node index-new.js",
+    "dev": "nodemon index-new.js",
+    "test": "jest",
+    "lint": "eslint .",
+    "logs": "tail -f logs/app-$(date +%Y-%m-%d).log",
+    "health": "curl http://localhost:3000/api/health"
+  },
+  "keywords": [
+    "barbershop",
+    "appointment",
+    "booking",
+    "grooming",
+    "nodejs",
+    "express",
+    "mongodb"
+  ],
+  "author": "Barbery's Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.5.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.0.0",
+    "express-rate-limit": "^6.10.0",
+    "compression": "^1.7.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "jest": "^29.6.2",
+    "eslint": "^8.47.0",
+    "supertest": "^6.3.3"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/barberys-backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/barberys-backend/issues"
+  },
+  "homepage": "https://github.com/yourusername/barberys-backend#readme"
+}

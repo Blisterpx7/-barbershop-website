@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="barber-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6B7280"/>
+      <stop offset="100%" style="stop-color:#4B5563"/>
+    </linearGradient>
+    <linearGradient id="barber-accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F59E0B"/>
+      <stop offset="100%" style="stop-color:#D97706"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="200" height="200" fill="url(#barber-bg)" rx="20"/>
+  
+  <!-- Profile icon -->
+  <circle cx="100" cy="80" r="40" fill="url(#barber-accent)" stroke="#B45309" stroke-width="3"/>
+  <circle cx="100" cy="70" r="25" fill="white"/>
+  <rect x="70" y="130" width="60" height="40" rx="20" fill="white"/>
+  
+  <!-- Scissors icon -->
+  <g transform="translate(85, 150)">
+    <path d="M5 5L15 15L5 25" stroke="#B45309" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M25 5L35 15L25 25" stroke="#B45309" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <circle cx="15" cy="15" r="1.5" fill="#B45309"/>
+    <circle cx="25" cy="15" r="1.5" fill="#B45309"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="100" y="190" text-anchor="middle" font-family="sans-serif" font-size="12" fill="white">
+    Barber Profile
+  </text>
+</svg>
