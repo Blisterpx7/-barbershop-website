@@ -1,8 +1,8 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
-// Get API URL from environment or fallback to deployed backend
-const apiUrl = import.meta.env.VITE_API_URL || 'https://barbershop-website-vy8e.onrender.com';
+// Hardcoded backend URL for testing
+const apiUrl = 'https://barbershop-website-vy8e.onrender.com';
 
 const AuthContext = createContext();
 
