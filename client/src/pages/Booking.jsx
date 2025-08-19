@@ -56,7 +56,7 @@ const BookingForm = () => {
 
   const fetchServices = async () => {
     try {
-      const response = await axios.get('/api/services');
+      const response = await axios.get('https://barbershop-website-vy8e.onrender.com/api/services');
       setServices(response.data);
     } catch (error) {
       toast.error('Failed to load services');
@@ -65,7 +65,7 @@ const BookingForm = () => {
 
   const fetchBarbers = async () => {
     try {
-      const response = await axios.get('/api/barbers');
+      const response = await axios.get('https://barbershop-website-vy8e.onrender.com/api/barbers');
       setBarbers(response.data);
     } catch (error) {
       toast.error('Failed to load barbers');

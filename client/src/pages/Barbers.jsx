@@ -21,9 +21,10 @@ const Barbers = () => {
 
   const fetchBarbers = async () => {
     try {
-      const response = await axios.get('/api/barbers');
+      const response = await axios.get('https://barbershop-website-vy8e.onrender.com/api/barbers');
       setBarbers(response.data);
     } catch (error) {
+      console.error('Error fetching barbers:', error);
       toast.error('Failed to load barbers');
     } finally {
       setLoading(false);

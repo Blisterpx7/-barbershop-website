@@ -29,7 +29,7 @@ const Dashboard = () => {
 
   const fetchAppointments = async () => {
     try {
-      const response = await axios.get('/api/appointments');
+      const response = await axios.get('https://barbershop-website-vy8e.onrender.com/api/appointments');
       setAppointments(response.data);
     } catch (error) {
       toast.error('Failed to load appointments');
