@@ -5,8 +5,8 @@ const ItemList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Get API URL from environment or fallback to localhost
-  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+  // Get API URL from environment or fallback to deployed backend
+  const apiUrl = import.meta.env.VITE_API_URL || 'https://barbershop-website-vy8e.onrender.com';
 
   useEffect(() => {
     fetchItems();

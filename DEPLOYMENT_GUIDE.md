@@ -105,8 +105,8 @@ ADMIN_EMAIL=jamesmayang51@gmail.com
 ---
 
 ## **🎯 Your Live URLs:**
-- **Frontend**: `https://your-project.vercel.app`
-- **Backend**: `https://barbershop-api.onrender.com`
+- **Frontend**: `https://your-project.vercel.app` (to be deployed)
+- **Backend**: `https://barbershop-website-vy8e.onrender.com` ✅ **LIVE!**
 - **Database**: MongoDB Atlas (already working)
 
 ---

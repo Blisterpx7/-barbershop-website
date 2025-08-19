@@ -1,6 +1,9 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
+// Get API URL from environment or fallback to deployed backend
+const apiUrl = import.meta.env.VITE_API_URL || 'https://barbershop-website-vy8e.onrender.com';
+
 const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -29,7 +32,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post('/api/auth/login', { email, password });
+      const response = await axios.post(`${apiUrl}/api/auth/login`, { email, password });
       const { token, customer } = response.data;
       
       localStorage.setItem('token', token);
@@ -48,7 +51,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      const response = await axios.post('/api/auth/register', userData);
+      const response = await axios.post(`${apiUrl}/api/auth/register`, userData);
       const { token, customer } = response.data;
       
       localStorage.setItem('token', token);
