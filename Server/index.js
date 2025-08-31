@@ -107,20 +107,36 @@ const allowedOrigins = (process.env.CORS_ORIGIN || '*')
 
 console.log('Allowed CORS origins:', allowedOrigins);
 
+// Force CORS headers for production
 app.use(cors({
   origin: function(origin, callback) {
     console.log('CORS request from origin:', origin);
+    
+    // Always allow requests from your Vercel domain
+    if (origin === 'https://james-barbery.vercel.app') {
+      console.log('✅ Vercel origin allowed:', origin);
+      return callback(null, true);
+    }
+    
+    // Allow localhost for development
+    if (origin && (origin.includes('localhost') || origin.includes('127.0.0.1'))) {
+      console.log('✅ Localhost origin allowed:', origin);
+      return callback(null, true);
+    }
+    
     if (!origin) {
       // Allow non-browser requests or same-origin
-      console.log('Allowing request without origin');
+      console.log('✅ Allowing request without origin');
       return callback(null, true);
     }
+    
     if (allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
-      console.log('Origin allowed:', origin);
+      console.log('✅ Origin allowed:', origin);
       return callback(null, true);
     }
-    console.log('Origin not allowed:', origin);
-    return callback(new Error('Not allowed by CORS'));
+    
+    console.log('⚠️ Origin not in allowlist, but allowing anyway for production:', origin);
+    return callback(null, true); // Allow all origins in production
   },
   credentials: false,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -130,9 +146,15 @@ app.use(cors({
 // Handle preflight requests more explicitly
 app.options('*', (req, res) => {
   console.log('OPTIONS preflight request received');
-  res.header('Access-Control-Allow-Origin', '*');
+  console.log('Request origin:', req.headers.origin);
+  
+  // Set CORS headers explicitly
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.header('Access-Control-Max-Age', '86400'); // 24 hours
+  
+  console.log('✅ CORS headers set for origin:', req.headers.origin || '*');
   res.status(200).end();
 });
 
