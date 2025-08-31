@@ -15,9 +15,10 @@ services:
       - key: JWT_SECRET
         sync: false
       - key: CORS_ORIGIN
-        value: "https://james-barbery.vercel.app"
+        value: "https://james-barbery.vercel.app,http://localhost:5173,http://127.0.0.1:5173"
       - key: ADMIN_EMAIL
         sync: false
     # Keep service always running (no auto-sleep)
     autoDeploy: true
     healthCheckPath: /
+    # Force CORS to allow Vercel frontend
