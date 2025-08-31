@@ -9,15 +9,15 @@ services:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 10000
+        value: 3000
       - key: MONGODB_URI
         sync: false
       - key: JWT_SECRET
         sync: false
       - key: CORS_ORIGIN
-        value: "*"
+        value: "https://james-barbery.vercel.app"
       - key: ADMIN_EMAIL
         sync: false
     # Keep service always running (no auto-sleep)
     autoDeploy: true
-    healthCheckPath: /api/health
+    healthCheckPath: /

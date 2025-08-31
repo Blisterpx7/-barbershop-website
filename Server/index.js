@@ -43,6 +43,34 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
+// Root endpoint for health check
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Barbershop Backend API is running!', 
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    version: '1.0.0',
+    endpoints: {
+      test: '/api/test',
+      auth: '/api/auth',
+      barbers: '/api/barbers',
+      services: '/api/services',
+      appointments: '/api/appointments',
+      admin: '/api/admin'
+    }
+  });
+});
+
+// Health check endpoint for Render
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
 // Test endpoint
 app.get('/api/test', (req, res) => {
   console.log('Test endpoint hit');
@@ -146,6 +174,25 @@ app.use('/api/barbers', barbersRouter);
 app.use('/api/services', servicesRouter);
 app.use('/api/appointments', appointmentsRouter);
 app.use('/api/admin', adminRouter);
+
+// 404 handler for undefined routes
+app.use('*', (req, res) => {
+  res.status(404).json({
+    error: 'Route not found',
+    message: `Cannot ${req.method} ${req.originalUrl}`,
+    availableEndpoints: [
+      'GET /',
+      'GET /api/test',
+      'GET /api/test-db',
+      'POST /api/auth/register',
+      'POST /api/auth/login',
+      'GET /api/barbers',
+      'GET /api/services',
+      'GET /api/appointments',
+      'POST /api/appointments'
+    ]
+  });
+});
 
 const PORT = process.env.PORT || 3000;
 
