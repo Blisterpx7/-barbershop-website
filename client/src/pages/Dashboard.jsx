@@ -5,6 +5,7 @@ import { Calendar, Clock, User, Star, CreditCard, CheckCircle, XCircle, Sparkles
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import ScrollReveal from '../components/animations/ScrollReveal';
+import { getApiUrl } from '../config/api';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -29,7 +30,7 @@ const Dashboard = () => {
 
   const fetchAppointments = async () => {
     try {
-      const response = await axios.get('https://barbershop-website-vy8e.onrender.com/api/appointments');
+      const response = await axios.get(`${getApiUrl('/appointments')}`);
       setAppointments(response.data);
     } catch (error) {
       toast.error('Failed to load appointments');
@@ -90,7 +91,7 @@ const Dashboard = () => {
     
     setActionLoading(true);
     try {
-      await axios.put(`/api/appointments/${selectedAppointment._id}/cancel`, {
+      await axios.put(`${getApiUrl('/appointments')}/${selectedAppointment._id}/cancel`, {
         reason: cancelReason
       });
       
@@ -111,7 +112,7 @@ const Dashboard = () => {
     
     setActionLoading(true);
     try {
-      await axios.put(`/api/appointments/${selectedAppointment._id}/reschedule`, {
+      await axios.put(`${getApiUrl('/appointments')}/${selectedAppointment._id}/reschedule`, {
         newDateTime: new Date(newDateTime).toISOString()
       });
       

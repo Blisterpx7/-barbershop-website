@@ -173,7 +173,7 @@ const Services = () => {
 
   const fetchServices = async () => {
     try {
-      const response = await axios.get('https://barbershop-website-vy8e.onrender.com/api/services');
+      const response = await axios.get(`${getApiUrl('/services')}`);
       setServices(response.data);
     } catch (error) {
       toast.error('Failed to load services');

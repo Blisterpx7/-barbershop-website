@@ -4,6 +4,7 @@ import { User, Star, Clock, Award, Sparkles, Zap, ArrowRight, Heart, Shield } fr
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import ScrollReveal from '../components/animations/ScrollReveal';
+import { getApiUrl } from '../config/api';
 
 const Barbers = () => {
   const [barbers, setBarbers] = useState([]);
@@ -21,7 +22,7 @@ const Barbers = () => {
 
   const fetchBarbers = async () => {
     try {
-      const response = await axios.get('https://barbershop-website-vy8e.onrender.com/api/barbers');
+      const response = await axios.get(`${getApiUrl('/barbers')}`);
       setBarbers(response.data);
     } catch (error) {
       console.error('Error fetching barbers:', error);

@@ -4,6 +4,7 @@ import { Calendar, Clock, User, CreditCard, CheckCircle, Sparkles, Zap, ArrowRig
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useAuth } from '../contexts/AuthContext';
+import { getApiUrl } from '../config/api';
 
 const BookingForm = () => {
   const { user } = useAuth();
@@ -56,7 +57,7 @@ const BookingForm = () => {
 
   const fetchServices = async () => {
     try {
-      const response = await axios.get('https://barbershop-website-vy8e.onrender.com/api/services');
+      const response = await axios.get(`${getApiUrl('/services')}`);
       setServices(response.data);
     } catch (error) {
       toast.error('Failed to load services');
@@ -65,7 +66,7 @@ const BookingForm = () => {
 
   const fetchBarbers = async () => {
     try {
-      const response = await axios.get('https://barbershop-website-vy8e.onrender.com/api/barbers');
+      const response = await axios.get(`${getApiUrl('/barbers')}`);
       setBarbers(response.data);
     } catch (error) {
       toast.error('Failed to load barbers');
@@ -121,6 +122,26 @@ const BookingForm = () => {
       return;
     }
 
+      // Test server connectivity first
+      try {
+        console.log('Testing server connectivity...');
+        const testResponse = await axios.get(`${getApiUrl('/test')}`);
+        console.log('Server test successful:', testResponse.data);
+        
+        // Also test the appointments endpoint with OPTIONS to check CORS
+        console.log('Testing CORS preflight...');
+        try {
+          const optionsResponse = await axios.options(`${getApiUrl('/appointments')}`);
+          console.log('CORS preflight successful:', optionsResponse.status);
+        } catch (optionsError) {
+          console.warn('CORS preflight failed (this might be normal):', optionsError);
+        }
+      } catch (error) {
+        console.error('Server connectivity test failed:', error);
+        toast.error('Cannot connect to server. Please try again later.');
+        return;
+      }
+
     setLoading(true);
     try {
       // Validate time format
@@ -152,12 +173,54 @@ const BookingForm = () => {
         token: token ? 'Present' : 'Missing'
       });
 
-      const response = await axios.post('/api/appointments', {
+      console.log('Making POST request to:', `${getApiUrl('/appointments')}`);
+      console.log('Request headers:', axios.defaults.headers.common);
+      console.log('Request data:', {
         serviceId: selectedService._id,
         barberId: selectedBarber._id,
         dateTime: dateTime.toISOString(),
         notes
       });
+
+      // Add explicit headers to ensure proper request
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      };
+
+      console.log('Sending request with config:', config);
+
+      // Try the request with explicit configuration
+      let response;
+      try {
+        console.log('Attempting POST request with explicit config...');
+        response = await axios.post(`${getApiUrl('/appointments')}`, {
+          serviceId: selectedService._id,
+          barberId: selectedBarber._id,
+          dateTime: dateTime.toISOString(),
+          notes
+        }, config);
+        console.log('Request successful with explicit config');
+      } catch (error) {
+        console.error('First attempt failed:', error);
+        
+        // If the first attempt fails, try without the config (using defaults)
+        console.log('Retrying without explicit config...');
+        try {
+          response = await axios.post(`${getApiUrl('/appointments')}`, {
+            serviceId: selectedService._id,
+            barberId: selectedBarber._id,
+            dateTime: dateTime.toISOString(),
+            notes
+          });
+          console.log('Request successful without explicit config');
+        } catch (secondError) {
+          console.error('Second attempt also failed:', secondError);
+          throw secondError; // Re-throw the error to be handled by the outer catch block
+        }
+      }
 
       console.log('Appointment created successfully:', response.data);
       setAppointment(response.data.appointment);
@@ -166,6 +229,9 @@ const BookingForm = () => {
     } catch (error) {
       console.error('Appointment creation error:', error);
       console.error('Error response:', error.response?.data);
+      console.error('Error status:', error.response?.status);
+      console.error('Error status text:', error.response?.statusText);
+      console.error('Full error object:', error);
       
       let errorMessage = 'Failed to create appointment';
       
@@ -177,6 +243,9 @@ const BookingForm = () => {
       } else if (error.response?.status === 403) {
         errorMessage = 'Access denied. Please log in again.';
         navigate('/login');
+      } else if (error.response?.status === 405) {
+        errorMessage = 'Method not allowed. Please try again or contact support.';
+        console.error('405 error - this suggests the server is not accepting POST requests to this endpoint');
       } else if (error.response?.data?.error) {
         errorMessage = error.response.data.error;
       } else if (error.message) {
@@ -205,13 +274,10 @@ const BookingForm = () => {
       const paymentResult = { success: true, method: 'cash' };
 
       if (paymentResult.success) {
-        // Confirm payment on backend
-        await axios.post('/api/payments/confirm', {
-          appointmentId: appointment._id,
-          paymentMethod: paymentResult.method
-        });
-
-        toast.success('Booking confirmed! Please bring exact amount when you visit.');
+        // Since there's no payments endpoint, we'll just confirm the appointment was created
+        // The appointment is already created in the previous step
+        
+        toast.success('Booking confirmed! Please bring exact amount (₱' + selectedService?.price + ') when you visit.');
         navigate('/dashboard');
       }
     } catch (error) {

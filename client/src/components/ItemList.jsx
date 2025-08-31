@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
+import { getApiUrl } from '../config/api';
 
 const ItemList = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Hardcoded backend URL for testing
-  const apiUrl = 'https://barbershop-website-vy8e.onrender.com';
+  // Get API URL from configuration
+  const apiUrl = getApiUrl();
 
   useEffect(() => {
     fetchItems();

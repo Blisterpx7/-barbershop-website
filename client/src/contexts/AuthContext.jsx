@@ -1,8 +1,9 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { getApiUrl } from '../config/api';
 
-// Hardcoded backend URL for testing
-const apiUrl = 'https://barbershop-website-vy8e.onrender.com';
+// Get API URL from configuration
+const apiUrl = getApiUrl();
 
 const AuthContext = createContext();
 

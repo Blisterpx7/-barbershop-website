@@ -9,17 +9,28 @@ const router = express.Router();
 
 // Middleware to verify JWT token
 const authenticateToken = (req, res, next) => {
+  console.log('=== APPOINTMENTS AUTHENTICATION ===');
+  console.log('URL:', req.url);
+  console.log('Method:', req.method);
+  console.log('Headers:', req.headers);
+  
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
+  console.log('Auth header:', authHeader);
+  console.log('Token:', token ? `Present (${token.substring(0, 20)}...)` : 'Missing');
+
   if (!token) {
+    console.log('❌ No token provided - returning 401');
     return res.status(401).json({ error: 'Access token required' });
   }
 
   jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key', (err, user) => {
     if (err) {
+      console.log('❌ Token verification failed:', err.message);
       return res.status(403).json({ error: 'Invalid token' });
     }
+    console.log('✅ Token verified successfully for user:', user.userId);
     req.user = user;
     next();
   });
@@ -46,6 +57,13 @@ router.post('/', authenticateToken, [
   body('dateTime').isISO8601().withMessage('Valid date and time required'),
   body('notes').optional().isLength({ max: 500 }).withMessage('Notes too long')
 ], async (req, res) => {
+  console.log('=== APPOINTMENT CREATION REQUEST ===');
+  console.log('Method:', req.method);
+  console.log('URL:', req.url);
+  console.log('Headers:', req.headers);
+  console.log('Body:', req.body);
+  console.log('User:', req.user);
+  console.log('====================================');
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
